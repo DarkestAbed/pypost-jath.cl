@@ -1,0 +1,23 @@
+[project]
+name = "pypost"
+version = "0.1.0"
+description = "Minimal bilingual blog framework — FastHTML + Markdown"
+requires-python = ">=3.13"
+license = "AGPL-3.0-or-later"
+dependencies = [
+    "mistune>=3.0",
+    "pygments>=2.18",
+    "python-fasthtml>=0.12.50",
+    "python-frontmatter>=1.1.0",
+    "uvicorn>=0.29",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pyflakes>=3.2",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

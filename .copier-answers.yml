@@ -1,0 +1,13 @@
+# Do NOT edit — Copier overwrites this file on update. It records your answers
+# and the template version so `uvx copier update --trust` can merge upgrades.
+_commit: v1.0.0
+_src_path: gh:DarkestAbed/pypost
+author: Javier Thompson
+default_lang: es
+include_demo_content: true
+languages:
+- es
+license: mit
+site_description: El lugar donde estacioné la Madre Nodriza
+site_name: Javier Thompson punto Ce Ele
+site_url: https://blog.jath.cl
