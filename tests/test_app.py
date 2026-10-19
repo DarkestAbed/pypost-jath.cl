@@ -5,6 +5,7 @@ rather than hardcoded languages or demo slugs, so the same suite validates any
 generated instance — single-language, no demo content, or both.
 """
 import asyncio
+import re
 import xml.etree.ElementTree as ET
 from html import escape as html_escape
 
@@ -223,6 +224,32 @@ def test_cache_headers():
     assert r.headers.get("cache-control") == "no-cache"
     r = client.get("/static/custom.css", headers={"if-none-match": r.headers["etag"]})
     assert r.status_code == 304
+
+
+def test_stylesheets_versioned_and_immutable():
+    html = client.get("/").text
+    for name in ("pygments", "custom", "theme"):
+        m = re.search(rf'href="(/static/{name}\.css\?v=[0-9a-f]{{8}})"', html)
+        assert m, name
+        r = client.get(m.group(1))
+        assert r.status_code == 200
+        assert "immutable" in r.headers.get("cache-control", "")
+
+
+def test_toc_is_not_a_nav_element():
+    "Pico's <nav> rules break a vertical list; the ToC must stay out of them."
+    xml = main.to_xml(main.toc_nav([{"level": 2, "text": "A", "anchor": "a"}], DEFAULT_LANG))
+    assert xml.lstrip().startswith("<aside")
+    assert 'role="navigation"' in xml
+    assert xml.index("toc-label") < xml.index("toc-list")
+
+
+def test_toc_collapsible_open_by_default():
+    "Open without JS; the inline script only collapses it on narrow screens."
+    xml = main.to_xml(main.toc_nav([{"level": 2, "text": "A", "anchor": "a"}], DEFAULT_LANG))
+    assert "<details open>" in xml
+    assert '<summary class="toc-label">' in xml
+    assert "matchMedia('(max-width: 800px)')" in xml
 
 
 def test_theme_css_loads_after_custom_css():

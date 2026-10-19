@@ -1,3 +1,4 @@
+import hashlib
 import os
 import re
 import time
@@ -80,7 +81,10 @@ PYGMENTS_CSS = (
 
 _pygments_path = Path("static/pygments.css")
 _pygments_path.parent.mkdir(exist_ok=True)
-_pygments_path.write_text(PYGMENTS_CSS)
+# Only write on change: dev mode reloads on *.css, so an unconditional write
+# would restart the server forever.
+if not _pygments_path.exists() or _pygments_path.read_text() != PYGMENTS_CSS:
+    _pygments_path.write_text(PYGMENTS_CSS)
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -302,10 +306,16 @@ function copyCode(btn) {
 
 favicon     = Link(rel="icon", href="/static/favicon.svg", type="image/svg+xml")
 pico_css    = Link(rel="stylesheet", href="/static/vendor/pico.classless.min.css")
-pygments_css = Link(rel="stylesheet", href="/static/pygments.css")
-custom_css  = Link(rel="stylesheet", href="/static/custom.css")
+def _versioned(path: str) -> str:
+    "URL with a content hash, so the file can be cached forever (see middleware)."
+    digest = hashlib.sha256(Path(path).read_bytes()).hexdigest()[:8]
+    return f"/{path}?v={digest}"
+
+
+pygments_css = Link(rel="stylesheet", href=_versioned("static/pygments.css"))
+custom_css  = Link(rel="stylesheet", href=_versioned("static/custom.css"))
 # theme.css loads last so its rules win over custom.css at equal specificity.
-theme_css   = Link(rel="stylesheet", href="/static/theme.css")
+theme_css   = Link(rel="stylesheet", href=_versioned("static/theme.css"))
 
 # default_hdrs=False drops FastHTML's CDN scripts (htmx, fasthtml.js, surreal,
 # css-scope-inline) — this app uses no htmx attributes, so none are needed and
@@ -366,7 +376,8 @@ class _ResponseHeadersMiddleware(BaseHTTPMiddleware):
         resp = await call_next(request)
         resp.headers["X-Content-Type-Options"] = "nosniff"
         path = request.url.path
-        if path.startswith(("/static/vendor/", "/static/fonts/")):
+        if (path.startswith(("/static/vendor/", "/static/fonts/"))
+                or (path.startswith("/static/") and "v" in request.query_params)):
             resp.headers["Cache-Control"] = "public, max-age=31536000, immutable"
         elif path.startswith("/static/"):
             # Unversioned URLs that change on update/edit: always revalidate
@@ -527,10 +538,25 @@ def toc_nav(toc: list[dict], lang: str):
     for entry in toc:
         cls = "toc-h2" if entry["level"] == 2 else "toc-h3"
         items.append(Li(A(entry["text"], href=f"#{entry['anchor']}"), cls=cls))
-    return Nav(
-        P(s["toc_label"], cls="toc-label"),
-        Ul(*items, cls="toc-list"),
+    # <aside role=navigation>, not <nav>: Pico's nav rules (flex row, padded
+    # inline-block <li>s, negative margins) would wreck a vertical list.
+    # <details open> keeps the ToC expanded without JS; the inline script
+    # collapses it on phones before first paint (breakpoint matches the
+    # 800px one in custom.css) and re-opens it if the window widens.
+    return Aside(
+        Details(
+            Summary(s["toc_label"], cls="toc-label"),
+            Ul(*items, cls="toc-list"),
+            open=True,
+        ),
+        Script(
+            "(function(){var d=document.currentScript.previousElementSibling,"
+            "m=matchMedia('(max-width: 800px)');"
+            "function f(){d.open=!m.matches;}f();m.addEventListener('change',f);})();"
+        ),
         cls="toc-nav",
+        role="navigation",
+        aria_label=s["toc_label"],
     )
 
 
@@ -826,4 +852,5 @@ def not_found_catchall(req, path: str):
 
 if __name__ == "__main__":
     dev = os.environ.get("ENV", "development") != "production"
-    serve(port=PORT, reload=dev, reload_includes=["*.md"] if dev else None)
+    # *.css: restart on stylesheet edits so the ?v= hashes are recomputed.
+    serve(port=PORT, reload=dev, reload_includes=["*.md", "*.css"] if dev else None)

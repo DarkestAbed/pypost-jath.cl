@@ -307,17 +307,20 @@ nav.site-nav {
   margin-bottom: 0.35rem;
 }
 
-/* Post layout: body + optional ToC sidebar */
+/* Post layout: body + optional ToC sidebar. Fixed grid columns, so the
+   text sits in the same place whether or not the post has a ToC (which
+   comes first in the markup). minmax(0, …) stops long code lines from
+   widening the column. */
 .post-layout {
-  display: flex;
-  gap: 3rem;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: minmax(0, var(--measure)) var(--toc-width);
+  column-gap: 3rem;
+  align-items: start;
 }
 
 .post-body {
-  flex: 1;
-  min-width: 0;
-  max-width: var(--measure);
+  grid-column: 1;
+  grid-row: 1;
   font-size: 1.0rem;
   line-height: 1.8;
 }
@@ -335,23 +338,32 @@ nav.site-nav {
 
 /* ── Table of contents ── */
 .toc-nav {
+  grid-column: 2;
+  grid-row: 1;
   position: sticky;
   top: 5rem;
-  width: var(--toc-width);
-  flex-shrink: 0;
   font-size: 0.825rem;
-  align-self: flex-start;
   border-left: 2px solid var(--border);
   padding-left: 1rem;
 }
 
-.toc-label {
+.toc-nav details { margin: 0; }
+
+/* <summary>; !important beats Pico's accordion colors (up to 0,3,2) */
+.toc-nav .toc-label {
   font-family: var(--font-mono);
   font-size: 0.7rem;
+  line-height: 1.5;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--text-muted);
+  color: var(--text-muted) !important;
   margin-bottom: 0.5rem;
+}
+
+/* Desktop: a plain always-open sidebar, not a toggle */
+@media (min-width: 801px) {
+  .toc-nav .toc-label         { pointer-events: none; }
+  .toc-nav .toc-label::after  { display: none; }
 }
 
 .toc-list {
@@ -362,6 +374,7 @@ nav.site-nav {
   flex-direction: column;
   gap: 0.2rem;
 }
+.toc-list li { list-style: none; margin: 0; }
 
 .toc-list a {
   color: var(--text-muted);
@@ -543,11 +556,10 @@ footer.site-footer p {
 
 /* ── Responsive ── */
 @media (max-width: 800px) {
-  /* stretch: flex-start would let .post-body grow to its widest line */
-  .post-layout { flex-direction: column; gap: 1.5rem; align-items: stretch; }
+  .post-layout { grid-template-columns: minmax(0, 1fr); row-gap: 1.5rem; }
+  .post-body, .toc-nav { grid-column: 1; grid-row: auto; }
   .toc-nav {
     position: static;
-    width: 100%;
     border-left: none;
     border-top: 1px solid var(--border);
     padding: 1rem 0 0;

@@ -286,3 +286,14 @@ uv run uvicorn main:app --host 0.0.0.0 --port $PORT
 ```
 
 Set `SITE_URL` wherever you deploy; everything else is optional.
+
+**Behind Cloudflare:** Cloudflare's *Browser Cache TTL* (default 4 hours)
+replaces the `Cache-Control` header the app sends, so visitors can keep stale
+CSS after a deploy. Set *Caching → Configuration → Browser Cache TTL* to
+**Respect Existing Headers**. After upgrading from a version older than
+v1.0.2, purge the cache once (*Caching → Configuration → Purge Everything*).
+
+How caching works: stylesheets are linked as `/static/x.css?v=<hash>` and
+served with a one-year `immutable` cache; the hash changes with the file
+content, so a deploy (or, in dev, the auto-restart on a `.css` edit) picks up
+new CSS right away. Unversioned `/static/` URLs are served `no-cache`.
