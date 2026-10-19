@@ -8,8 +8,22 @@
    evolves; edit theme.css instead of overriding rules here.
    ============================================================ */
 
+/* ── Layout tokens ──
+   Defaults only. :where() keeps them at zero specificity, so a plain
+   `:root { --content-width: … }` in theme.css overrides them. */
+:where(:root) {
+  --content-width: 1180px;                  /* nav, main and footer */
+  --gutter:        clamp(1rem, 3vw, 2rem);  /* left/right page padding */
+  --toc-width:     240px;                   /* post table of contents */
+  --measure:       70ch;                    /* max line length of prose */
+  --font-size-max: 112.5%;                  /* caps Pico's font scaling (18px) */
+}
+
 /* ── Base ── */
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  font-size: min(var(--pico-font-size), var(--font-size-max));
+}
 
 body {
   font-family: var(--font-body);
@@ -106,9 +120,9 @@ nav.site-nav {
 }
 
 .nav-inner {
-  max-width: 900px;
+  max-width: var(--content-width);
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 var(--gutter);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -169,9 +183,9 @@ nav.site-nav {
 
 /* ── Container ── */
 .container {
-  max-width: 900px;
+  max-width: var(--content-width);
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 2rem var(--gutter);
 }
 
 /* ── Page header (index) ── */
@@ -302,7 +316,7 @@ nav.site-nav {
 .post-body {
   flex: 1;
   min-width: 0;
-  max-width: 72ch;
+  max-width: var(--measure);
   font-size: 1.0rem;
   line-height: 1.8;
 }
@@ -322,7 +336,7 @@ nav.site-nav {
 .toc-nav {
   position: sticky;
   top: 5rem;
-  width: 220px;
+  width: var(--toc-width);
   flex-shrink: 0;
   font-size: 0.825rem;
   align-self: flex-start;
@@ -473,7 +487,7 @@ nav.site-nav {
 
 /* ── About page ── */
 .about-body {
-  max-width: 72ch;
+  max-width: var(--measure);
   font-size: 1.0rem;
   line-height: 1.8;
   margin-top: 1.5rem;
@@ -486,8 +500,9 @@ nav.site-nav {
 
 /* ── Footer ── */
 footer.site-footer {
-  margin-top: 4rem;
-  padding: 2rem 1.5rem;
+  max-width: var(--content-width);
+  margin: 4rem auto 0;
+  padding: 2rem var(--gutter);
   border-top: 1px solid var(--border);
   text-align: center;
 }
@@ -523,7 +538,9 @@ footer.site-footer p {
 @media (max-width: 640px) {
   h1                  { font-size: 1.6rem; }
   .nav-links          { gap: 1rem; }
-  .post-card          { padding: 1.25rem; }
+  .post-card          { padding: 1rem; }
+  pre,
+  .code-block .highlight pre { padding: 1rem; }
   .post-header h1     { font-size: 1.5rem; }
   .series-nav         { flex-direction: column; }
   .series-next        { text-align: left; margin-left: 0; }

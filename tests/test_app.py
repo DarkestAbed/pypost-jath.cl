@@ -171,6 +171,14 @@ def test_static_assets():
         assert client.get(f).status_code == 200
 
 
+def test_layout_uses_tokens():
+    "Widths and gutters come from overridable variables, not fixed values."
+    css = client.get("/static/custom.css").text
+    for token in ("--content-width", "--gutter", "--toc-width", "--measure", "--font-size-max"):
+        assert f"var({token})" in css, token
+    assert "900px" not in css
+
+
 def _raw_status(path: str) -> int:
     "Call the app with a literal (undecoded) path, bypassing any client normalization."
     scope = {"type": "http", "http_version": "1.1", "method": "GET",

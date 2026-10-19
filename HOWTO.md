@@ -170,6 +170,25 @@ Change the variables and the whole site re-skins, because `static/custom.css`
 theme toggle in the nav stores a cookie server-side, so there's no flash on
 reload.
 
+### Page width and spacing
+
+The layout reads five variables. Their defaults live in `static/custom.css`;
+override any of them in `static/theme.css` (a commented block is there):
+
+```css
+:root {
+  --content-width: 1180px;                  /* nav, main and footer */
+  --gutter:        clamp(1rem, 3vw, 2rem);  /* left/right page padding */
+  --toc-width:     240px;                   /* post table of contents */
+  --measure:       70ch;                    /* max line length of prose */
+  --font-size-max: 112.5%;                  /* caps Pico's font scaling */
+}
+```
+
+Pico grows the base font from 16px up to 21px on wide screens;
+`--font-size-max` stops it at 18px so wide screens get more text per line,
+not just bigger text. Set it to `131.25%` to restore Pico's full scaling.
+
 ### Fonts
 
 Fonts are self-hosted woff2 files in `static/fonts/`, wired up by `@font-face`
