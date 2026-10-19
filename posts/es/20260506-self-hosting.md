@@ -1,10 +1,10 @@
 ---
 title: "Self hosting"
+description: "Post introductiorio a la muy probable serie de posts respecto de la autogestion de software en un laboratorio local. Porque el camino del self-hosting es un camino largo y muy interesante!"
 date: 2026-05-06
 # author: jath
-published: true
 slug: self-hosting
-description: "Post introductiorio a la muy probable serie de posts respecto de la autogestion de software en un laboratorio local. Porque el camino del self-hosting es un camino largo y muy interesante!"
+published: true
 tags: [self-hosted, home-lab]
   # - selfhosted
   # - home-lab

@@ -1,9 +1,9 @@
 ---
 title: Bienvenido a pypost
-date: 2026-03-25
-published: true
-slug: demo-bienvenida
 description: "Un framework de blog limpio y desplegable con Python, FastHTML y Markdown."
+date: 2026-03-25
+slug: demo-bienvenida
+published: true
 tags: [meta, fasthtml]
 # translations: {en: welcome}
 ---

@@ -1,9 +1,9 @@
 ---
 title: "Demo de características: Código, Índice y Series"
-date: 2026-03-25
-published: true
-slug: demo-caracteristicas
 description: "Demuestra el resaltado de sintaxis, el índice de contenidos y la navegación de series."
+date: 2026-03-25
+slug: demo-caracteristicas
+published: true
 tags: [demo, python]
 # translations: {en: features-demo}
 series: "Primeros pasos"

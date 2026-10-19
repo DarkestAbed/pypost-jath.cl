@@ -1,10 +1,10 @@
 ---
 title: "Cómo Kubernetes decide dónde ejecutar un Pod"
-date: 2026-03-15
-author: jath
-published: true
-slug: kubernetes-scheduling
 description: "Un recorrido por el pipeline del kube-scheduler: predicados, prioridades, y por qué tu Pod terminó en ese nodo."
+date: 2026-03-15
+# author: jath
+slug: kubernetes-scheduling
+published: true
 tags: [kubernetes, infraestructura, devops]
   # - kubernetes
   # - infraestructura

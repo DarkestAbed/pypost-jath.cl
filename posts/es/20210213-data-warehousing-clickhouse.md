@@ -2,6 +2,7 @@
 title: Data warehousing en Clickhouse en 15 minutos
 description: Un breve acercamiento a crear data warehouses en Clickhouse
 date: 2021-02-13
+slug: data-warehousing-clickhouse
 published: true
 tags: [clickhouse, data-warehousing]
 # categories:

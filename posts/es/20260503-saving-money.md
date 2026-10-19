@@ -1,10 +1,10 @@
 ---
 title: "Saving Money"
+description: "Un pequeño viaje de exploracion en el uso de herramientas de IA generativa para mejorar la calidad de vida de un humano."
 date: 2026-05-03
 # author: jath
-published: true
 slug: saving-money
-description: "Un pequeño viaje de exploracion en el uso de herramientas de IA generativa para mejorar la calidad de vida de un humano."
+published: true
 tags: [genai, budget, prompt]
 #   - genai
 #   - budget

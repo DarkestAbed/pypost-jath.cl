@@ -1,10 +1,10 @@
 ---
 title: "Bienvenido a jath.cl"
-date: 2026-03-01
-author: jath
-published: true
-slug: bienvenida
 description: "El primer artículo de este blog técnico. Qué esperar, por qué existe, y cómo está construido."
+date: 2026-03-01
+# author: jath
+slug: bienvenida
+published: true
 tags: [meta, fasthtml, python]
 toc: false
 #   - meta

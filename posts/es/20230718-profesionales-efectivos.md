@@ -2,11 +2,12 @@
 title: 'Profesionales efectivos'
 description: 'Cómo navegar la delgada línea entre el desacuerdo y la co-construcción.'
 date: 2023-07-18
-tags: [liderazgo, cultura]
+slug: profesionales-efectivos
 published: true
-categories:
-  - liderazgo
-  - cultura
+tags: [liderazgo, cultura]
+# categories:
+#   - liderazgo
+#   - cultura
 ---
 
 ## Cómo navegar la delgada línea entre el desacuerdo y la co-construcción

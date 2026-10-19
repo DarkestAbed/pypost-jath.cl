@@ -1,9 +1,9 @@
 ---
 title: Transformación digital y buzzwords empresariales
-date: 2018-02-13
-published: true
-slug: six-years-ago
 description: Una breve provocación respecto de la Transformación Digital.
+date: 2018-02-13
+slug: six-years-ago
+published: true
 tags: [transformacion-digital, hola]
 # categories:
 #   - transformacion-digital

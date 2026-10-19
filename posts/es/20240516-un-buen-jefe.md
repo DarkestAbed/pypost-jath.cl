@@ -2,8 +2,9 @@
 title: Ser jefe. Una mirada des-romantizada
 description: Ser jefe (y/o líder) en esta época es una labor compleja.
 date: 2024-05-16
-tags: [liderazgo, experiencias, trabajo]
+slug: un-buen-jefe
 published: true
+tags: [liderazgo, experiencias, trabajo]
 # categories:
 #   - liderazgo
 #   - experiencias

@@ -2,13 +2,14 @@
 title: CodeOps (o cómo estamos empujando ventas a través de marcos metodológicos)
 description: Crear conocimiento es difícil y vale la pena. La vale cuando es con fines comerciales?
 date: 2024-09-03
-tags: [software, ventas, desarrollo, xaas]
-categories:
-  - software
-  - ventas
-  - desarrollo
-  - xaas
+slug: equis-as-a-service
 published: true
+tags: [software, ventas, desarrollo, xaas]
+# categories:
+#   - software
+#   - ventas
+#   - desarrollo
+#   - xaas
 ---
 
 Me tope hace muy poco con un articulo de The New Stack que habla de los beneficios de CodeOps (https://thenewstack.io/coding-from-scratch-creates-new-risks/). Como nunca antes habia leido ni escuchado el concepto, y me parecio intrigante. Asi que investigue al respecto (de forma ni cerca de ser exhaustiva), y me encontre con una buena definicion:
