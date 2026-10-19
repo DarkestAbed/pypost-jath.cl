@@ -83,6 +83,11 @@ def test_no_slash_redirects():
 
 # ── Language handling ──────────────────────────────────────────────────────────
 
+def test_lang_button_hidden_with_one_language(monkeypatch):
+    monkeypatch.setattr(main, "SUPPORTED_LANGS", [DEFAULT_LANG])
+    assert "lang-btn" not in main.to_xml(main.nav_bar(DEFAULT_LANG, "/"))
+
+
 def test_html_lang_attribute():
     for lang in SUPPORTED_LANGS:
         assert f'lang="{lang}"' in client.get(main._lang_root(lang)).text
@@ -215,7 +220,24 @@ def test_cache_headers():
     r = client.get("/static/fonts/inter-var.woff2")
     assert "immutable" in r.headers.get("cache-control", "")
     r = client.get("/static/custom.css")
-    assert "max-age=86400" in r.headers.get("cache-control", "")
+    assert r.headers.get("cache-control") == "no-cache"
+    r = client.get("/static/custom.css", headers={"if-none-match": r.headers["etag"]})
+    assert r.status_code == 304
+
+
+def test_theme_css_loads_after_custom_css():
+    html = client.get("/").text
+    assert html.index("/static/custom.css") < html.index("/static/theme.css")
+
+
+def test_pygments_rules_scoped_to_theme():
+    rules = [l for l in main.PYGMENTS_CSS.splitlines() if l.strip()]
+    assert rules
+    for line in rules:
+        assert line.startswith(("[data-theme='dark'] .highlight",
+                                "[data-theme='light'] .highlight")), line
+    # the --code-bg override must come after the style's own dark background
+    assert rules[-1] == "[data-theme='dark'] .highlight { background: var(--code-bg); }"
 
 
 def test_no_external_asset_urls():

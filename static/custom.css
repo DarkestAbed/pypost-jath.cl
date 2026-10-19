@@ -120,6 +120,7 @@ nav.site-nav {
 }
 
 .nav-inner {
+  width: 100%;  /* Pico makes <nav> a flex container; don't shrink to content */
   max-width: var(--content-width);
   margin: 0 auto;
   padding: 0 var(--gutter);
@@ -465,6 +466,23 @@ nav.site-nav {
 }
 .back-link:hover { color: var(--accent); text-decoration: none; }
 
+/* ── Pagination ── */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+.pager-newer, .pager-older {
+  font-family: var(--font-mono);
+  font-size: 0.825rem;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+}
+.pager-newer:hover, .pager-older:hover { color: var(--accent); text-decoration: none; }
+.pager-older { margin-left: auto; }
+
 /* ── Tags page ── */
 .tags-page         { max-width: 700px; }
 .tags-page h1      { margin-bottom: 1.5rem; }
@@ -525,7 +543,8 @@ footer.site-footer p {
 
 /* ── Responsive ── */
 @media (max-width: 800px) {
-  .post-layout { flex-direction: column; gap: 1.5rem; }
+  /* stretch: flex-start would let .post-body grow to its widest line */
+  .post-layout { flex-direction: column; gap: 1.5rem; align-items: stretch; }
   .toc-nav {
     position: static;
     width: 100%;

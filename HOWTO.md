@@ -161,14 +161,23 @@ edit** (it's written once at generation and `copier update` never overwrites
 it). The dark and light palettes:
 
 ```css
-:root, [data-theme="dark"] { --bg: #0d0f12; --accent: #4da8fa; ... }
-[data-theme="light"]       { --bg: #f6f7f9; --accent: #0b6ab3; ... }
+:root, [data-theme="dark"] { --bg: #0d0f12; --accent: #4da8da; color-scheme: dark;  ... }
+[data-theme="light"]       { --bg: #ffffff; --accent: #0066cc; color-scheme: light; ... }
 ```
 
 Change the variables and the whole site re-skins, because `static/custom.css`
-(the layout, template-owned) only references variables — never touch it. The
-theme toggle in the nav stores a cookie server-side, so there's no flash on
-reload.
+(the layout, template-owned) only references variables — never touch it.
+`theme.css` loads after `custom.css`, so a rule you add there wins over the
+layout's rule at equal specificity.
+
+Visitors without a theme cookie get the light theme if their OS prefers it,
+dark otherwise. The theme toggle in the nav stores a cookie server-side, so
+there's no flash on reload.
+
+> **Blogs generated before v1.0.2:** `copier update` doesn't touch your
+> `theme.css`, so add `color-scheme: dark;` to the dark block and
+> `color-scheme: light;` to the light block yourself — without it, browsers
+> draw light scrollbars (very visible on code blocks) on the dark theme.
 
 ### Page width and spacing
 

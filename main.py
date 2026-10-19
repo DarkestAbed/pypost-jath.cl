@@ -65,13 +65,17 @@ def render_md(text: str) -> str:
 
 # ── Pygments CSS (generated once at startup) ──────────────────────────────────
 
-_dark_css  = HtmlFormatter(style=PYGMENTS_STYLE_DARK,  cssclass="highlight").get_style_defs(".highlight")
-_light_css = HtmlFormatter(style=PYGMENTS_STYLE_LIGHT, cssclass="highlight").get_style_defs(".highlight")
+def _scoped_style_defs(style: str, theme: str) -> str:
+    "Pygments rules for one style, every selector scoped to one data-theme."
+    fmt = HtmlFormatter(style=style, cssclass="highlight")
+    sel = f"[data-theme='{theme}'] .highlight"
+    return "\n".join(fmt.get_background_style_defs(sel) + fmt.get_token_style_defs(sel))
+
 
 PYGMENTS_CSS = (
-    f"[data-theme='dark'] .highlight {{ background: var(--code-bg); }}\n"
-    f"[data-theme='dark'] {_dark_css}\n"
-    f"[data-theme='light'] {_light_css}\n"
+    _scoped_style_defs(PYGMENTS_STYLE_DARK, "dark") + "\n"
+    + _scoped_style_defs(PYGMENTS_STYLE_LIGHT, "light") + "\n"
+    + "[data-theme='dark'] .highlight { background: var(--code-bg); }\n"
 )
 
 _pygments_path = Path("static/pygments.css")
@@ -280,7 +284,8 @@ SLUG_TAGS: dict[str, str] = {v: k for k, v in TAG_SLUGS.items()}
 theme_init = Script("""
 (function(){
   var m = document.cookie.match(/(?:^|;\\s*)theme=([^;]+)/);
-  if (m) document.documentElement.setAttribute('data-theme', m[1]);
+  var t = m ? m[1] : (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : null);
+  if (t) document.documentElement.setAttribute('data-theme', t);
 })();
 """)
 
@@ -298,8 +303,9 @@ function copyCode(btn) {
 favicon     = Link(rel="icon", href="/static/favicon.svg", type="image/svg+xml")
 pico_css    = Link(rel="stylesheet", href="/static/vendor/pico.classless.min.css")
 pygments_css = Link(rel="stylesheet", href="/static/pygments.css")
-theme_css   = Link(rel="stylesheet", href="/static/theme.css")
 custom_css  = Link(rel="stylesheet", href="/static/custom.css")
+# theme.css loads last so its rules win over custom.css at equal specificity.
+theme_css   = Link(rel="stylesheet", href="/static/theme.css")
 
 # default_hdrs=False drops FastHTML's CDN scripts (htmx, fasthtml.js, surreal,
 # css-scope-inline) — this app uses no htmx attributes, so none are needed and
@@ -334,7 +340,7 @@ def _before(req):
 app = FastHTML(
     default_hdrs=False,
     before=_before,
-    hdrs=(charset, viewport, favicon, theme_init, pico_css, pygments_css, theme_css, custom_css, copy_script),
+    hdrs=(charset, viewport, favicon, theme_init, pico_css, pygments_css, custom_css, theme_css, copy_script),
     htmlkw={"data-theme": "dark"},
 )
 
@@ -363,7 +369,9 @@ class _ResponseHeadersMiddleware(BaseHTTPMiddleware):
         if path.startswith(("/static/vendor/", "/static/fonts/")):
             resp.headers["Cache-Control"] = "public, max-age=31536000, immutable"
         elif path.startswith("/static/"):
-            resp.headers["Cache-Control"] = "public, max-age=86400"
+            # Unversioned URLs that change on update/edit: always revalidate
+            # (StaticFiles answers with a cheap 304 via ETag/Last-Modified).
+            resp.headers["Cache-Control"] = "no-cache"
         else:
             resp.headers["Content-Security-Policy"] = _CSP
         return resp
@@ -408,7 +416,8 @@ def _lang_toggle_href(path: str, current_lang: str) -> str:
 def nav_bar(lang: str, current_path: str):
     s = UI_STRINGS[lang]
     links    = [Li(A(label, href=href)) for label, href in NAV_LINKS[lang]]
-    lang_btn = A(s["switch_lang"], href=_lang_toggle_href(current_path, lang), cls="lang-btn")
+    lang_btn = (A(s["switch_lang"], href=_lang_toggle_href(current_path, lang), cls="lang-btn")
+                if len(SUPPORTED_LANGS) > 1 else "")
     theme_btn = Button(
         s["toggle_theme"],
         cls="theme-btn",
