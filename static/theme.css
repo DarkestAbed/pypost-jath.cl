@@ -53,6 +53,8 @@
   --tag-bg:        #241b3f;
   --tag-color:     #ff7edb;
 
+  color-scheme: dark;   /* dark native scrollbars and form controls */
+
   --pico-background-color:      var(--bg);
   --pico-card-background-color: var(--bg-surface);
   --pico-card-border-color:     var(--border);
@@ -84,6 +86,8 @@
   --code-bg:       #f0f2f6;
   --tag-bg:        #edf0f5;
   --tag-color:     #4466aa;
+
+  color-scheme: light;
 
   --pico-background-color:      var(--bg);
   --pico-card-background-color: var(--bg-surface);
