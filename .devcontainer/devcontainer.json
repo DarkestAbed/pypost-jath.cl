@@ -1,0 +1,25 @@
+// .devcontainer/devcontainer.json
+{
+  "name": "Test Dev Container space",
+  // Uses a pre-built image from Microsoft's artifact registry
+  "image": "://microsoft.com",
+
+  // Automatically installs helpful VS Code extensions upon container startup
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+
+  // Forwards specific internal container ports to your local host machine
+  "forwardPorts": [8000],
+
+  // Runs scripts or installation commands right after the container is created
+  "postCreateCommand": "uv run python main.py"
+}

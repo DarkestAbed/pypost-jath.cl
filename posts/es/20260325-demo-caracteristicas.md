@@ -5,7 +5,7 @@ published: true
 slug: demo-caracteristicas
 description: "Demuestra el resaltado de sintaxis, el índice de contenidos y la navegación de series."
 tags: [demo, python]
-translations: {en: features-demo}
+# translations: {en: features-demo}
 series: "Primeros pasos"
 series_part: 1
 toc: true

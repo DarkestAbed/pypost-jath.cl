@@ -2,10 +2,10 @@
 title: Bienvenido a pypost
 date: 2026-03-25
 published: true
-slug: bienvenida
+slug: demo-bienvenida
 description: "Un framework de blog limpio y desplegable con Python, FastHTML y Markdown."
 tags: [meta, fasthtml]
-translations: {en: welcome}
+# translations: {en: welcome}
 ---
 
 **pypost** es un framework de blog minimalista construido sobre [FastHTML](https://fastht.ml), [Mistune](https://mistune.lepture.com) y [Pygments](https://pygments.org). Sin paso de compilación, sin base de datos — solo archivos Markdown y Python.
