@@ -33,21 +33,25 @@
 }
 
 /* ── Color tokens ── */
+/* Dark: SynthWave '84-inspired, pushed slightly bluer. Text colors are
+   all ≥ 7:1 (WCAG AAA) against --bg and --bg-surface. */
 :root,
 [data-theme="dark"] {
-  --bg:            #0d0f12;
-  --bg-surface:    #141720;
-  --bg-elevated:   #1a1f2e;
-  --border:        #1e2330;
-  --border-bright: #2a3050;
-  --accent:        #4da8da;
-  --accent-dim:    #2d6a8a;
-  --text:          #b0b8cc;
-  --text-heading:  #e8eaf0;
-  --text-muted:    #4a526a;
-  --code-bg:       #111318;
-  --tag-bg:        #1a1f2e;
-  --tag-color:     #6a8aaa;
+  --bg:            #16142a;
+  --bg-surface:    #1e1b36;
+  --bg-elevated:   #262340;
+  --border:        #2f2b52;
+  --border-bright: #495495;
+  --accent:        #36f9f6;   /* neon cyan */
+  --accent-dim:    #29b8d8;
+  --accent-2:      #ff7edb;   /* neon pink */
+  --accent-3:      #fede5d;   /* neon yellow */
+  --text:          #ebe9f7;
+  --text-heading:  #ffffff;
+  --text-muted:    #a3a8d9;
+  --code-bg:       #100e1f;
+  --tag-bg:        #241b3f;
+  --tag-color:     #ff7edb;
 
   --pico-background-color:      var(--bg);
   --pico-card-background-color: var(--bg-surface);
@@ -55,9 +59,9 @@
   --pico-color:                 var(--text);
   --pico-h1-color:              var(--text-heading);
   --pico-h2-color:              var(--text-heading);
-  --pico-h3-color:              var(--accent);
+  --pico-h3-color:              var(--accent-2);
   --pico-primary:               var(--accent);
-  --pico-primary-hover:         #7ac4e8;
+  --pico-primary-hover:         var(--accent-2);
   --pico-secondary-color:       var(--text-muted);
   --pico-border-color:          var(--border);
   --pico-muted-color:           var(--text-muted);
@@ -97,3 +101,50 @@
   --pico-code-background-color: var(--code-bg);
   --pico-code-color:            var(--accent);
 }
+
+/* ── Dark-mode accents ──
+   Small additions on top of custom.css. Selectors carry [data-theme]
+   so they outrank the template rules that load after this file. */
+[data-theme="dark"] h3 { color: var(--accent-2); }
+
+[data-theme="dark"] .nav-brand,
+[data-theme="dark"] .page-header h1,
+[data-theme="dark"] .post-header h1 {
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.35), 0 0 12px rgba(54, 249, 246, 0.35);
+}
+
+[data-theme="dark"] .series-label { color: var(--accent-3); }
+
+[data-theme="dark"] ::selection {
+  background: var(--border-bright);
+  color: var(--text-heading);
+}
+
+/* ── Code highlighting: SynthWave '84 token colors (dark only) ──
+   Overrides the generated pygments.css; [data-theme] scoping beats its
+   unscoped .highlight rules. */
+[data-theme="dark"] .highlight                { color: var(--text); }
+[data-theme="dark"] .highlight .hll           { background-color: #2a2550; }
+[data-theme="dark"] .highlight :is(.c, .ch, .cm, .cp, .cpf, .c1, .cs, .gu)
+                                              { color: #848bbd; font-style: italic; }
+[data-theme="dark"] .highlight :is(.k, .kc, .kd, .kn, .kp, .kr, .ow)
+                                              { color: #fede5d; font-weight: normal; }
+[data-theme="dark"] .highlight :is(.kt, .nc, .ne, .nb, .bp)
+                                              { color: #fe4450; font-weight: normal; }
+[data-theme="dark"] .highlight :is(.s, .sa, .sb, .sc, .dl, .sd, .s2, .sh, .si, .sx, .sr, .s1, .ss, .ld)
+                                              { color: #ff8b39; }
+[data-theme="dark"] .highlight .se            { color: #f97e72; }
+[data-theme="dark"] .highlight :is(.m, .mb, .mf, .mh, .mi, .mo, .il, .l)
+                                              { color: #f97e72; }
+[data-theme="dark"] .highlight :is(.nf, .fm, .nd)
+                                              { color: #36f9f6; }
+[data-theme="dark"] .highlight :is(.n, .nv, .vc, .vg, .vi, .vm, .nx, .py, .nl, .nn, .ni, .no)
+                                              { color: #ff7edb; }
+[data-theme="dark"] .highlight .na            { color: #fede5d; }
+[data-theme="dark"] .highlight .nt            { color: #72f1b8; }
+[data-theme="dark"] .highlight :is(.o, .p, .pm, .w, .x, .esc, .g, .gh, .gr, .gt)
+                                              { color: var(--text); }
+[data-theme="dark"] .highlight .gd            { color: #fe4450; }
+[data-theme="dark"] .highlight .gi            { color: #72f1b8; }
+[data-theme="dark"] .highlight :is(.gp, .go)  { color: #36f9f6; }
+[data-theme="dark"] .highlight .err           { color: #fe4450; background: none; }
